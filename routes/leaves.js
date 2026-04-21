@@ -3,20 +3,15 @@ const { db } = require('../database/init');
 const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
-
-// All leave routes require authentication
 router.use(authenticate);
 
 /**
- * POST /api/leaves
- * Apply for a new leave
+ * POST /api/leaves to apply for a new leave
  */
 router.post('/', (req, res) => {
   try {
     const { leave_type, from_date, to_date, reason } = req.body;
     const { employee_id, name } = req.user;
-
-    // Validation
     if (!leave_type || !from_date || !to_date || !reason) {
       return res.status(400).json({ error: 'All fields are required: leave_type, from_date, to_date, reason' });
     }
@@ -46,8 +41,7 @@ router.post('/', (req, res) => {
 });
 
 /**
- * GET /api/leaves/my
- * Get all leaves for the logged-in employee
+ * GET /api/leaves/my to get all leaves for the logged-in employee
  */
 router.get('/my', (req, res) => {
   try {
@@ -65,15 +59,12 @@ router.get('/my', (req, res) => {
 });
 
 /**
- * PATCH /api/leaves/:id/cancel
- * Cancel/withdraw a pending leave (employee only)
+ * PATCH /api/leaves/:id/cancel to cancel/withdraw a pending leave from employees side
  */
 router.patch('/:id/cancel', (req, res) => {
   try {
     const { id } = req.params;
     const { employee_id } = req.user;
-
-    // Find the leave
     const leave = db.prepare('SELECT * FROM leaves WHERE id = ? AND employee_id = ?').get(id, employee_id);
 
     if (!leave) {
