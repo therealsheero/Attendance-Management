@@ -1,10 +1,5 @@
-/* ══════════════════════════════════════════════════════════
-   Auth JS — Login & Registration Logic
-   ══════════════════════════════════════════════════════════ */
-
 const API_BASE = '';
 
-// ─── Toast Notifications ──────────────────────────────────
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -21,7 +16,7 @@ function showToast(message, type = 'info') {
   }, 3500);
 }
 
-// ─── Check if already logged in ──────────────────────────
+// checking if already logged in or not
 (function checkAuth() {
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || 'null');
@@ -36,7 +31,6 @@ function showToast(message, type = 'info') {
   }
 })();
 
-// ─── Login Form ──────────────────────────────────────────
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
@@ -67,7 +61,6 @@ if (loginForm) {
         throw new Error(data.error || 'Login failed.');
       }
 
-      // Store token and user info
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
@@ -88,7 +81,6 @@ if (loginForm) {
   });
 }
 
-// ─── Registration Form ──────────────────────────────────
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
   registerForm.addEventListener('submit', async (e) => {
