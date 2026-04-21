@@ -6,8 +6,7 @@ const { db } = require('../database/init');
 const router = express.Router();
 
 /**
- * POST /api/auth/register
- * Employee self-registration
+ * POST /api/auth/register for employee self-registration
  */
 router.post('/register', (req, res) => {
   try {
@@ -29,14 +28,10 @@ router.post('/register', (req, res) => {
     if (password.length < 4) {
       return res.status(400).json({ error: 'Password must be at least 4 characters.' });
     }
-
-    // Check if employee_id already exists
     const existing = db.prepare('SELECT id FROM employees WHERE employee_id = ?').get(employee_id.trim());
     if (existing) {
       return res.status(409).json({ error: 'Employee ID already registered.' });
     }
-
-    // Hash password and insert
     const passwordHash = bcrypt.hashSync(password, 10);
     db.prepare(
       'INSERT INTO employees (employee_id, name, password_hash, role) VALUES (?, ?, ?, ?)'
@@ -50,8 +45,7 @@ router.post('/register', (req, res) => {
 });
 
 /**
- * POST /api/auth/login
- * Login for both employees and HR
+ * POST /api/auth/login for login for both employees and HR(admin)
  */
 router.post('/login', (req, res) => {
   try {
@@ -60,20 +54,14 @@ router.post('/login', (req, res) => {
     if (!employee_id || !password) {
       return res.status(400).json({ error: 'Employee ID and password are required.' });
     }
-
-    // Find user
     const user = db.prepare('SELECT * FROM employees WHERE employee_id = ?').get(employee_id.trim());
     if (!user) {
       return res.status(401).json({ error: 'Invalid Employee ID or password.' });
     }
-
-    // Verify password
     const validPassword = bcrypt.compareSync(password, user.password_hash);
     if (!validPassword) {
       return res.status(401).json({ error: 'Invalid Employee ID or password.' });
     }
-
-    // Generate JWT
     const token = jwt.sign(
       {
         id: user.id,
