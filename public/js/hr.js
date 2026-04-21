@@ -139,7 +139,6 @@ async function fetchAllLeaves() {
   }
 }
 
-// ─── Render All Leaves Table ────────────────────────────
 function renderAllLeaves() {
   const tbody = document.getElementById('allLeavesBody');
   let filtered = allLeaves;
@@ -189,7 +188,6 @@ function renderAllLeaves() {
   `).join('');
 }
 
-// ─── Filter Tabs ────────────────────────────────────────
 document.querySelectorAll('.filter-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
