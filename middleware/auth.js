@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 /**
- * Middleware to authenticate JWT tokens from Authorization header.
- * Attaches decoded user info to req.user on success.
+ * Middleware to authenticate JWT tokens from Authorization header and attaches decoded user info to req.user on success.
  */
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -23,8 +22,7 @@ function authenticate(req, res, next) {
 }
 
 /**
- * Middleware factory to restrict access to specific roles.
- * @param  {...string} roles - Allowed roles (e.g., 'hr', 'employee')
+ * Middleware factory to restrict access to specific roles like @param  {...string} roles - Allowed roles (e.g., 'hr', 'employee')
  */
 function requireRole(...roles) {
   return (req, res, next) => {
