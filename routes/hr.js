@@ -3,13 +3,10 @@ const { db } = require('../database/init');
 const { authenticate, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
-
-// All HR routes require authentication + HR role
 router.use(authenticate, requireRole('hr'));
 
 /**
- * GET /api/hr/leaves
- * Get all leave applications with optional status filter
+ * GET /api/hr/leaves to get all leave applications with optional status filter
  * Query params: ?status=pending|approved|rejected|cancelled
  */
 router.get('/leaves', (req, res) => {
@@ -35,15 +32,11 @@ router.get('/leaves', (req, res) => {
 });
 
 /**
- * GET /api/hr/leaves/date/:date
- * Get all leaves that overlap with a specific date (approved + pending)
- * Date format: YYYY-MM-DD
+ * GET /api/hr/leaves/date/:date to get all leaves that overlap with a specific date (approved and pending)
  */
 router.get('/leaves/date/:date', (req, res) => {
   try {
     const { date } = req.params;
-
-    // Validate date format
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       return res.status(400).json({ error: 'Date must be in YYYY-MM-DD format.' });
     }
@@ -63,9 +56,7 @@ router.get('/leaves/date/:date', (req, res) => {
 });
 
 /**
- * PATCH /api/hr/leaves/:id
- * Approve or reject a leave application
- * Body: { action: "approved" | "rejected" }
+ * PATCH /api/hr/leaves/:id to approve or reject a leave application -> Body: { action: "approved" | "rejected" }
  */
 router.patch('/leaves/:id', (req, res) => {
   try {
@@ -76,8 +67,6 @@ router.patch('/leaves/:id', (req, res) => {
     if (!action || !['approved', 'rejected'].includes(action)) {
       return res.status(400).json({ error: 'Action must be "approved" or "rejected".' });
     }
-
-    // Find the leave
     const leave = db.prepare('SELECT * FROM leaves WHERE id = ?').get(id);
     if (!leave) {
       return res.status(404).json({ error: 'Leave application not found.' });
@@ -101,12 +90,10 @@ router.patch('/leaves/:id', (req, res) => {
 });
 
 /**
- * GET /api/hr/stats
- * Get leave statistics: count of people on leave per date (next 30 days)
+ * GET /api/hr/stats to get leave statistics: count of people on leave per date (next 30 days)
  */
 router.get('/stats', (req, res) => {
   try {
-    // Get count of approved leaves per date for the next 30 days
     const stats = db.prepare(`
       WITH RECURSIVE dates(date) AS (
         SELECT date('now')
@@ -125,7 +112,6 @@ router.get('/stats', (req, res) => {
       ORDER BY d.date
     `).all();
 
-    // Today's stats
     const today = new Date().toISOString().split('T')[0];
     const todayOnLeave = db.prepare(`
       SELECT COUNT(*) as count FROM leaves
