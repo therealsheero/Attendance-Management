@@ -52,9 +52,9 @@ function initialize() {
 
   // Seed HR accounts if they don't exist
   const hrAccounts = [
-    { employee_id: 'DIR001', name: 'Col (Dr.) Praveen Kumar Singh', password: 'admin@hr1' },
-    { employee_id: 'DIR002', name: 'Akash Deep', password: 'admin@hr2' },
-    { employee_id: 'DIR003', name: 'Lt Col Akshay Bahl', password: 'admin@hr3' },
+    { employee_id: 'HR001', name: 'Manager 1', password: 'admin1231' },
+    { employee_id: 'HR002', name: 'Manager 2', password: 'admin1232' },
+    { employee_id: 'HR003', name: 'Manager 3', password: 'admin1233' },
   ];
 
   const insertHR = db.prepare(`
