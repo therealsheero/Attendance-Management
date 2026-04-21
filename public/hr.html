@@ -8,11 +8,9 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Toast container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <div class="app-container">
-    <!-- Navbar -->
     <nav class="navbar">
       <a href="/hr.html" class="navbar-brand">
         <div class="logo-icon">🏛️</div>
@@ -26,8 +24,6 @@
         <button class="btn btn-ghost btn-sm" id="logoutBtn" title="Sign Out">🚪 Logout</button>
       </div>
     </nav>
-
-    <!-- Stats Cards -->
     <section class="section">
       <div class="stats-grid">
         <div class="stat-card teal">
@@ -52,8 +48,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Date-wise Leave View -->
     <section class="section">
       <h2 class="section-title">📅 Date-wise Leave View</h2>
       <div class="card">
@@ -93,12 +87,8 @@
         </div>
       </div>
     </section>
-
-    <!-- Pending Leave Requests -->
     <section class="section">
       <h2 class="section-title">📝 Leave Requests</h2>
-
-      <!-- Filter tabs -->
       <div class="filter-tabs">
         <button class="filter-tab active" data-filter="pending">⏳ Pending</button>
         <button class="filter-tab" data-filter="approved">✅ Approved</button>
@@ -140,8 +130,6 @@
       </div>
     </section>
   </div>
-
-  <!-- Action Confirmation Modal -->
   <div class="modal-overlay hidden" id="actionModal">
     <div class="modal">
       <h3 id="actionModalTitle">Confirm Action</h3>
