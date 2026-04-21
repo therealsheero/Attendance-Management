@@ -1,26 +1,16 @@
-/* ══════════════════════════════════════════════════════════
-   Employee Portal JS — Leave Management
-   ══════════════════════════════════════════════════════════ */
-
 const API_BASE = '';
 let allLeaves = [];
 let currentFilter = 'all';
 let cancelLeaveId = null;
-
-// ─── Auth Check ──────────────────────────────────────────
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user') || 'null');
 
 if (!token || !user || user.role !== 'employee') {
   window.location.href = '/index.html';
 }
-
-// ─── Populate user info ─────────────────────────────────
 document.getElementById('userName').textContent = user.name;
 document.getElementById('empIdDisplay').value = user.employee_id;
 document.getElementById('empNameDisplay').value = user.name;
-
-// ─── Toast ───────────────────────────────────────────────
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -33,8 +23,6 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 300);
   }, 3500);
 }
-
-// ─── Utility ─────────────────────────────────────────────
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
@@ -65,14 +53,12 @@ function authHeaders() {
   };
 }
 
-// ─── Set default date to today ──────────────────────────
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('fromDate').value = today;
 document.getElementById('toDate').value = today;
 document.getElementById('fromDate').min = today;
 document.getElementById('toDate').min = today;
 
-// Sync toDate when fromDate changes
 document.getElementById('fromDate').addEventListener('change', function () {
   const toDate = document.getElementById('toDate');
   if (toDate.value < this.value) {
@@ -81,7 +67,6 @@ document.getElementById('fromDate').addEventListener('change', function () {
   toDate.min = this.value;
 });
 
-// ─── Fetch Leaves ───────────────────────────────────────
 async function fetchLeaves() {
   try {
     const res = await fetch(`${API_BASE}/api/leaves/my`, {
@@ -101,8 +86,6 @@ async function fetchLeaves() {
     showToast('Failed to load leaves.', 'error');
   }
 }
-
-// ─── Render Leaves Table ────────────────────────────────
 function renderLeaves() {
   const tbody = document.getElementById('leavesBody');
   let filtered = allLeaves;
@@ -147,7 +130,6 @@ function renderLeaves() {
   `).join('');
 }
 
-// ─── Filter Tabs ────────────────────────────────────────
 document.querySelectorAll('.filter-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -157,7 +139,6 @@ document.querySelectorAll('.filter-tab').forEach(tab => {
   });
 });
 
-// ─── Submit Leave Form ──────────────────────────────────
 document.getElementById('leaveForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -198,7 +179,6 @@ document.getElementById('leaveForm').addEventListener('submit', async (e) => {
 
     showToast(data.message, 'success');
 
-    // Reset form
     document.getElementById('leaveType').value = '';
     document.getElementById('fromDate').value = today;
     document.getElementById('toDate').value = today;
@@ -212,8 +192,6 @@ document.getElementById('leaveForm').addEventListener('submit', async (e) => {
     btn.innerHTML = 'Submit Leave Application';
   }
 });
-
-// ─── Cancel Leave Modal ─────────────────────────────────
 function openCancelModal(leaveId) {
   cancelLeaveId = leaveId;
   document.getElementById('cancelModal').classList.remove('hidden');
@@ -252,8 +230,6 @@ document.getElementById('cancelModalConfirm').addEventListener('click', async ()
     btn.innerHTML = 'Yes, Cancel Leave';
   }
 });
-
-// Close modal on overlay click
 document.getElementById('cancelModal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) {
     document.getElementById('cancelModal').classList.add('hidden');
@@ -261,11 +237,8 @@ document.getElementById('cancelModal').addEventListener('click', (e) => {
   }
 });
 
-// ─── Logout ─────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.clear();
   window.location.href = '/index.html';
 });
-
-// ─── Init ───────────────────────────────────────────────
 fetchLeaves();
