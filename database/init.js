@@ -5,12 +5,11 @@ const path = require('path');
 const dbPath = path.join(__dirname, '..', 'attendance.db');
 const db = new Database(dbPath);
 
-// Enable WAL mode for better concurrency
+// WAL mode for better concurrency
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
 function initialize() {
-  // Create employees table
   db.exec(`
     CREATE TABLE IF NOT EXISTS employees (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,8 +39,6 @@ function initialize() {
       FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
     )
   `);
-
-  // Create indexes for performance
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_leaves_employee_id ON leaves(employee_id);
     CREATE INDEX IF NOT EXISTS idx_leaves_status ON leaves(status);
@@ -49,8 +46,6 @@ function initialize() {
     CREATE INDEX IF NOT EXISTS idx_leaves_to_date ON leaves(to_date);
     CREATE INDEX IF NOT EXISTS idx_employees_employee_id ON employees(employee_id);
   `);
-
-  // Seed HR accounts if they don't exist
   const hrAccounts = [
     { employee_id: 'HR001', name: 'Manager 1', password: 'admin1231' },
     { employee_id: 'HR002', name: 'Manager 2', password: 'admin1232' },
@@ -71,7 +66,7 @@ function initialize() {
 
   seedTransaction();
 
-  console.log('✅ Database initialized successfully');
+  console.log('Database initialized successfully');
 }
 
 module.exports = { db, initialize };
