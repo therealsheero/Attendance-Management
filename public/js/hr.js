@@ -1,25 +1,16 @@
-/* ══════════════════════════════════════════════════════════
-   HR Dashboard JS — Leave Management & Stats
-   ══════════════════════════════════════════════════════════ */
-
 const API_BASE = '';
 let allLeaves = [];
 let currentFilter = 'pending';
 let actionLeaveId = null;
 let actionType = null;
-
-// ─── Auth Check ──
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user') || 'null');
 
 if (!token || !user || user.role !== 'hr') {
   window.location.href = '/index.html';
 }
-
-// ─── Populate user info ─────────────────────────────────
 document.getElementById('userName').textContent = user.name;
 
-// ─── Toast ───────────────────────────────────────────────
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -33,7 +24,6 @@ function showToast(message, type = 'info') {
   }, 3500);
 }
 
-// ─── Utility ─────────────────────────────────────────────
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
@@ -64,14 +54,12 @@ function authHeaders() {
   };
 }
 
-// ─── Set today's date ───────────────────────────────────
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('viewDate').value = today;
 document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN', {
   day: '2-digit', month: 'short'
 });
 
-// ─── Fetch Dashboard Stats ──────────────────────────────
 async function fetchStats() {
   try {
     const res = await fetch(`${API_BASE}/api/hr/stats`, {
@@ -92,8 +80,6 @@ async function fetchStats() {
     showToast('Failed to load stats.', 'error');
   }
 }
-
-// ─── Fetch Leaves by Date ───────────────────────────────
 async function fetchLeavesByDate(date) {
   try {
     const res = await fetch(`${API_BASE}/api/hr/leaves/date/${date}`, {
@@ -139,7 +125,6 @@ async function fetchLeavesByDate(date) {
   }
 }
 
-// ─── Fetch All Leaves ───────────────────────────────────
 async function fetchAllLeaves() {
   try {
     const res = await fetch(`${API_BASE}/api/hr/leaves`, {
@@ -214,7 +199,6 @@ document.querySelectorAll('.filter-tab').forEach(tab => {
   });
 });
 
-// ─── Date View Buttons ──────────────────────────────────
 document.getElementById('viewDateBtn').addEventListener('click', () => {
   const date = document.getElementById('viewDate').value;
   if (date) fetchLeavesByDate(date);
@@ -225,12 +209,9 @@ document.getElementById('todayBtn').addEventListener('click', () => {
   fetchLeavesByDate(today);
 });
 
-// Also trigger on date input change
 document.getElementById('viewDate').addEventListener('change', function () {
   if (this.value) fetchLeavesByDate(this.value);
 });
-
-// ─── Action Modal ───────────────────────────────────────
 function openActionModal(leaveId, action) {
   actionLeaveId = leaveId;
   actionType = action;
@@ -293,7 +274,6 @@ document.getElementById('actionModalConfirm').addEventListener('click', async ()
   }
 });
 
-// Close modal on overlay click
 document.getElementById('actionModal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) {
     document.getElementById('actionModal').classList.add('hidden');
@@ -301,14 +281,11 @@ document.getElementById('actionModal').addEventListener('click', (e) => {
     actionType = null;
   }
 });
-
-// ─── Logout ─────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.clear();
   window.location.href = '/index.html';
 });
 
-// ─── Init ───────────────────────────────────────────────
 fetchStats();
 fetchAllLeaves();
 fetchLeavesByDate(today);
