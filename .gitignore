@@ -1,0 +1,8 @@
+*.db
+*.env
+*.csv
+*.db-shm
+*.db-wal
+node_modules/
+*.txt
+*.log

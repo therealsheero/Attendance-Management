@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HR Leave Management Dashboard — UIDAI Attendance Dashboard">
+  <title>HR Dashboard — UIDAI Attendance Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="/hr.html" class="navbar-brand">
+        <div class="logo-icon">🏛️</div>
+        <h1>UIDAI Attendance</h1>
+      </a>
+      <div class="navbar-user">
+        <div class="user-info">
+          <div class="user-name" id="userName">—</div>
+          <div class="user-role">HR Manager</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn" title="Sign Out">🚪 Logout</button>
+      </div>
+    </nav>
+
+    <!-- Stats Cards -->
+    <section class="section">
+      <div class="stats-grid">
+        <div class="stat-card teal">
+          <div class="stat-icon">🏖️</div>
+          <div class="stat-value" id="todayOnLeave">0</div>
+          <div class="stat-label">On Leave Today</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-value" id="pendingCount">0</div>
+          <div class="stat-label">Pending Requests</div>
+        </div>
+        <div class="stat-card violet">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value" id="selectedDateCount">—</div>
+          <div class="stat-label">Selected Date Leaves</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value" id="todayDate">—</div>
+          <div class="stat-label">Today's Date</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Date-wise Leave View -->
+    <section class="section">
+      <h2 class="section-title">📅 Date-wise Leave View</h2>
+      <div class="card">
+        <div class="date-picker-section">
+          <label for="viewDate">Select Date:</label>
+          <input type="date" id="viewDate" class="form-control">
+          <button class="btn btn-primary btn-sm" id="viewDateBtn">View Leaves</button>
+          <button class="btn btn-ghost btn-sm" id="todayBtn">Today</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="dateLeavesTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Status</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="dateLeavesBody">
+              <tr>
+                <td colspan="8">
+                  <div class="empty-state">
+                    <div class="empty-icon">📌</div>
+                    <h4>Select a date to view leaves</h4>
+                    <p>Use the date picker above</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pending Leave Requests -->
+    <section class="section">
+      <h2 class="section-title">📝 Leave Requests</h2>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="pending">⏳ Pending</button>
+        <button class="filter-tab" data-filter="approved">✅ Approved</button>
+        <button class="filter-tab" data-filter="rejected">❌ Rejected</button>
+        <button class="filter-tab" data-filter="all">All</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrapper">
+          <table id="allLeavesTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Reason</th>
+                <th>Applied On</th>
+                <th>Status</th>
+                <th>Action By</th>
+                <th>Action On</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allLeavesBody">
+              <tr>
+                <td colspan="12">
+                  <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h4>Loading leave requests...</h4>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Action Confirmation Modal -->
+  <div class="modal-overlay hidden" id="actionModal">
+    <div class="modal">
+      <h3 id="actionModalTitle">Confirm Action</h3>
+      <p id="actionModalText">Are you sure?</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost btn-sm" id="actionModalClose">Cancel</button>
+        <button class="btn btn-sm" id="actionModalConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/hr.js"></script>
+</body>
+</html>
